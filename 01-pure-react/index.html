@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure React</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+
+
+
+    <!-- react files  -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script>
+        function App() {
+            // to generate current time
+            // const time = new Date().toLocaleTimeString();
+            // using state to show real time
+            const [time, setTime] = React.useState(new Date().toLocaleTimeString())
+            // effect to change the real time
+            React.useEffect(function () {
+                setInterval(function () {
+                    setTime(new Date().toLocaleTimeString());
+                }, 1000);
+            }, []);
+            // --------------NOTE-----------------
+            // earlier when we used react build setup,
+            // we could directly return whatever we wanted
+            // but now it is not possible. because in react setup
+            // we used to write JSX and then it was tranformed into JS.
+            // here, we do not have any tool to convert JSX into JS
+            // so we are using createElement() funciton from react
+            // to create new element
+            return React.createElement("header", null, `Hello React! It is ${time}`);
+        }
+        // for rendering
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(React.createElement(App));
+    </script>
+</body>
+
+</html>
