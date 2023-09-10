@@ -1,17 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from 'react-dom/client'; // react before 18: import ReactDOM from 'react-dom'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
+
+function App() {
+    return <h1>Hello React!</h1>;
+}
+
+// react v18
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<React.StrictMode>
     <App />
-  </React.StrictMode>
-);
+</React.StrictMode>);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// react before 18
+// React.render(<App/>)
+// about StrictMode: renders our components twice
+// to check if there is any bug or any outdated components.
+// good practice to use StrictMode
