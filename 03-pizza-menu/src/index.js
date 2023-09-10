@@ -67,8 +67,24 @@ function Menu() {
     </div>)
 }
 function Footer() {
-    // return React.createElement("footer", null, "We're currently open!");
+
+    const hour = new Date().getHours();
+    const openHour = 8;
+    const closedHour = 22;
+    const isOpen = hour >= openHour && hour <= closedHour;
+    console.log(isOpen);
+    // if (hour >= openHour && hour <= closedHour) {
+    //     alert("Open");
+    // }
+    // else {
+    //     alert("Close");
+
+
+    // }
     return <footer>{new Date().toLocaleTimeString()}.We're currently open.</footer>
+
+
+    // return React.createElement("footer", null, "We're currently open!");
 }
 function Pizza() {
     return (<div>
