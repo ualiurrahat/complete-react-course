@@ -49,19 +49,20 @@ const pizzaData = [
 ];
 
 function App() {
-    return (<div className="container">
-        <Header />
-        <Menu />
-        <Footer />
-    </div>);
+    return (
+        <div className="container">
+            <Header />
+            <Menu />
+            <Footer />
+        </div>
+    );
 }
 function Header() {
     // const style = { color: "red", fontSize: "48px", textTransform: "uppercase" };
     const style = {};
     return (
-        <header className="header footer">
-
-            <h1 style={style}>Fast React Pizza Co.</h1>;
+        <header className="header">
+            <h1 style={style}>Fast React Pizza Co.</h1>
         </header>
     );
 }
@@ -71,26 +72,34 @@ function Menu() {
     // const pizzas = [];
     const numPizzas = pizzas.length;
 
-    return (<main className="menu">
-        <h2>Our Menu</h2>
+    return (
+        <main className="menu">
+            <h2>Our Menu</h2>
 
-        {/* conditional rendering: will render only when there are 
+            {/* conditional rendering: will render only when there are 
         pizzas available in the pizzaData array */
-            numPizzas > 0 ? (
-                <ul className="pizzas">
-                    {/* rendering lists: rendering all elements from a list
+                numPizzas > 0 ? (
+                    <>
+                        <p>
+                            Authentic Italian cuisine. 6 creative dishes to choose from. All
+                            from our stone oven, all organic, all delicious.
+                        </p>
+
+                        <ul className="pizzas">
+                            {/* rendering lists: rendering all elements from a list
         and make components for each element */}
-                    {pizzas.map((pizza) =>
-                        <Pizza pizzaObj={pizza} key={pizza.name}
-                        />)}
-                </ul>
-            ) : (
-                <p>We are currently working on our menu. Please come back later. :)</p>
-            )
-        }
+                            {pizzas.map((pizza) => (
+                                <Pizza pizzaObj={pizza} key={pizza.name} />
+                            ))}
+                        </ul>
+                    </>
+                ) : (
+                    <p>We are currently working on our menu. Please come back later :)</p>
+                )
+            }
 
 
-        {/* <Pizza
+            {/* <Pizza
             name="Pizza Spinaci"
             ingredients="Tomato, mozarella, spinach, and ricotta cheese"
             photoName="pizzas/spinaci.jpg"
@@ -103,18 +112,25 @@ function Menu() {
             price={13}
         /> */}
 
-    </main>)
+        </main>)
 }
 function Pizza({ pizzaObj }) {
     console.log(pizzaObj);
-    if (pizzaObj.soldOut) return null;
-    return (<li className="pizza">
-        <img src={pizzaObj.photoName} alt={pizzaObj.photoName} />
-        <h3>{pizzaObj.name}</h3>
-        <p>{pizzaObj.ingredients}</p>
-        <span>{pizzaObj.price}</span>
-
-    </li>
+    // if (pizzaObj.soldOut) return null;
+    return (
+        <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""
+            } `}>
+            <img src={pizzaObj.photoName} alt={pizzaObj.photoName} />
+            <div>
+                <h3>{pizzaObj.name}</h3>
+                <p>{pizzaObj.ingredients}</p>
+                {/* {pizzaObj.soldOut ?
+            <span>SOLD OUT</span>
+            : <span>{pizzaObj.price}</span>
+        } */}
+                <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
+            </div>
+        </li >
     );
 }
 function Footer() {
