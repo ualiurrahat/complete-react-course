@@ -121,7 +121,7 @@ function Footer() {
 
     // calculating open and close hour for restraunt.
     const hour = new Date().getHours();
-    const openHour = 8;
+    const openHour = 0;
     const closedHour = 22;
     const isOpen = hour >= openHour && hour <= closedHour;
     console.log(isOpen);
@@ -141,11 +141,7 @@ function Footer() {
         <footer className="footer">
             {
                 isOpen ?
-                    (<div className="order">
-                        <p>We are open until {closedHour}:00. Come
-                            visit us or order online.</p>
-                        <button className="btn">Order</button>
-                    </div>)
+                    <Order closedHour={closedHour} />
                     : (
                         <p>We are happy to welcome you between {openHour}:00 and {closedHour}:00. </p>
                     )
@@ -156,7 +152,14 @@ function Footer() {
 
     // return React.createElement("footer", null, "We're currently open!");
 }
-
+// order component
+function Order(props) {
+    return (<div className="order">
+        <p>We are open until {props.closedHour}:00. Come
+            visit us or order online.</p>
+        <button className="btn">Order</button>
+    </div>);
+}
 // react v18
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<React.StrictMode>
