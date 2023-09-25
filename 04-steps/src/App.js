@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 const messages = [
   "Learn React ⚛️",
@@ -7,14 +8,18 @@ const messages = [
 
 
 export default function App() {
-  const step = 1;
+  // declaring state to chage step value
+  const [step, setStep] = useState(1);
+
   // previous button handler
   function handlePrevious() {
-    alert("previous");
+    if (step > 1)
+      setStep(step - 1);
   }
   // next button handler
   function handleNext() {
-    alert("next");
+    if (step < 3)
+      setStep(step + 1);
   }
   return (
     <div className="steps">
