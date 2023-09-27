@@ -16,12 +16,13 @@ export default function App() {
   // previous button handler
   function handlePrevious() {
     if (step > 1)
-      setStep(step - 1);
+      setStep((s) => s - 1);
   }
   // next button handler
   function handleNext() {
     if (step < 3)
-      setStep(step + 1);
+      setStep((s) => s + 1);
+
   }
 
   // BAD Practice
@@ -33,7 +34,7 @@ export default function App() {
     <>
       {/* cross button: when it is click, whole UI is vanished.
       UI will reappear for clicking again  */}
-      <button className="close" onClick={() => setIsOpen(!isOpen)}>&times;</button>
+      <button className="close" onClick={() => setIsOpen((is) => !is)}>&times;</button>
       {isOpen && (<div div className="steps" >
         <div className="numbers">
           <div className={`${step >= 1 ? 'active' : ''}`}>1</div>
