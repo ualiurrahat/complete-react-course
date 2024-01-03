@@ -217,13 +217,13 @@ So ternaries come in rescure for us.
 const pagesRange = pages > 1000 ? "over a thousand pages" : "less than 1000";
 console.log(pagesRange);
 
-/* in logical operation(&&): 
+/* short circuiting in logical && operation: 
 1) if first condition is true, returns second value.
-if false, returns false(first value)
-short-circuiting in &&: if first condition if false.
+if false, returns false(first value)--->short circuiting
 // short-circuting: in certain condition,
 the logical operator will return the first value
 and will not even take a look at the second second value
+example: if first value within && statement is false, short-circuit occurs.
 */
 console.log(true && "react is awesome");
 // immeditately returns the second value
@@ -244,8 +244,8 @@ console.log(false && "falsy value");
 console.log(true && false);
 console.log(false && true);
 
-// logical || condition:
-// if first is true value, returns first
+// short circuiting in logical || condition:
+// if first is true value, returns first-->short circuit
 // if first is false, returns second value.
 console.log(true || "some string");
 console.log(false || "some string");
@@ -256,7 +256,7 @@ let's check countWrong var value below:
 const countWrong = (book.reviews.librarything.reviewsCount || "no data");
 console.log(countWrong);
 // here, countWrong is taking second value which is "no data"
-// but this is not write.
+// but this is not right.
 // the output should be 0 as the value for
 // librarything's review count is 0. but since 0 is considered here
 // as falsy, so || operator took second value which occurred wrong result.
@@ -279,7 +279,7 @@ const getTotalReviewsCount = book => {
     // here, reviews?., ? is the optional chaining.
     // we are telling the compiler if reviews value is a truthy value
     // then only go further to find value of reviewsCount
-    // if book.reviews produces undefine, compiler will not try to access reviewsCount
+    // if book.reviews produces undefined value, compiler will not try to access reviewsCount
     // as undefined.property is error.
     // also using ?? operator in case the left side (book.reviews?.reviewsCount)
     // equals to undefined, then taking 0 value for review count.
@@ -314,13 +314,15 @@ const longBooksWithMovie = books
     .filter((book) => book.pages > 500)
     .filter(book => book.hasMovieAdaptation);
 console.log(longBooksWithMovie);
+// NOTE: we used multipile filters here. It is allowed but not good practice.
+// using two logics within an && operation would be a good practice.
 const adventureBooks = books
     .filter(book => book.genres.includes("adventure"))
     .map(book => book.title);
 console.log(adventureBooks);
 
 /*Array.reduce:(callbackFunction(), starterValue);
-it reduces the entire value to just one value. returns the value
+it reduces the entire value to just one value. returns the value.
 does not change the array
 */
 const totalPagesToRead = books.reduce((currentSum, book) => currentSum + book.pages, 0);
