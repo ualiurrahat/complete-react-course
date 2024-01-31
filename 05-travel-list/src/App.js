@@ -1,16 +1,27 @@
 import { useState } from "react";
 
 export default function App() {
+  // using items state to update packing list
+  // with user added new item
+  // items is the array of item that user added in the packing list
+  // by submitting the items in the form
   const [items, setItems] = useState([]);
-  // function to add items in the list
+  // function to add items in the packing list
+  // based on user entered items in the form
+  // funciton takes the item added by user in the forum as parameter
+  // and returns a new array of items including this item with all the other ones.
   function handleAddItems(item) {
     setItems((items) => [...items, item]);
   }
-  // function to delete items from list
+  // function to delete items from packing list
+  // when the red cross button placed after the item name is clicked
   function handleDeleteItem(id) {
     setItems((items) => items.filter((item) => item.id !== id));
   }
   // function to update items based on checkbox clicked
+  // when checkbox is clicked, means item has been packed.
+  // if unchecked again,means items has not been packed.
+  // so need to toggle the packed property of item whenever checkbox is clicked.
   function handleToggleItem(id) {
     setItems((items) =>
       items.map((item) =>
@@ -37,17 +48,28 @@ function Logo() {
 }
 
 function Form({ onAddItems }) {
+  // using description state to create items
+  // based on user given data provided by the form
+  // description is the item name user wrote on the form
   const [description, setDescription] = useState("");
+  // using quantity state to manage quantitiy of each item
+  // user provides in the form.
   const [quantity, setQuantity] = useState(1);
-
+  // function  to prevent the reloading(HTML file nature) whenever add button is clicked or enter is pressed
+  // in form input i.e. form is submitted.
   function handleSubmit(e) {
     e.preventDefault();
-    // if user input null string as description, add nothing in the items list
+    // condition:if user tries to add an item with empty string i.e. null string as description
+    // it means there is no items to be added. So is description is null,just simply returning
+    // from the funciton without adding the null item.
     if (!description) return;
     // adding new items from user given submit form
     const newItem = { description, quantity, packed: false, id: Date.now() };
     console.log(newItem);
     onAddItems(newItem);
+
+    // after adding new item, resetting description as null string
+    // and quantity as 1, so that user can add other items in the list.
     setDescription("");
     setQuantity(1);
   }
@@ -80,7 +102,7 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
   const [sortBy, setSortBy] = useState("input");
   // to store items in sorted fashion
   let sortedItems;
-  // sorting by input : user provided order
+  // sorting by input : items will be seen by the order user entered items on the packing list
   if (sortBy === "input") sortedItems = items;
   // sorted by items description.
   if (sortBy === "description") {
@@ -106,6 +128,7 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
           />
         ))}
       </ul>
+      {/* options for sorting items by user given choice  */}
       <div className="actions">
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
           <option value="input">Sort by input order</option>
