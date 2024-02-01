@@ -18,7 +18,7 @@ export default function Form({ onAddItems }) {
     if (!description) return;
     // adding new items from user given submit form
     const newItem = { description, quantity, packed: false, id: Date.now() };
-    console.log(newItem);
+
     onAddItems(newItem);
 
     // after adding new item, resetting description as null string
@@ -27,7 +27,7 @@ export default function Form({ onAddItems }) {
     setQuantity(1);
   }
   return (
-    <form form className="add-form" onSubmit={handleSubmit}>
+    <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your 😍 trip?</h3>
       <select
         value={quantity}

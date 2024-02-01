@@ -28,7 +28,7 @@ export default function PackingList({
 
   return (
     <div className="list">
-      <ul>
+      {/* <ul>
         {sortedItems.map((item) => (
           <Item
             item={item}
@@ -37,7 +37,21 @@ export default function PackingList({
             onToggleItem={onToggleItem}
           />
         ))}
-      </ul>
+      </ul> */}
+      {sortedItems.length === 0 ? (
+        ""
+      ) : (
+        <ul>
+          {sortedItems.map((item) => (
+            <Item
+              item={item}
+              key={item.id}
+              onDeleteItem={onDeleteItem}
+              onToggleItem={onToggleItem}
+            />
+          ))}
+        </ul>
+      )}
       {/* options for sorting items by user given choice  */}
       <div className="actions">
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
