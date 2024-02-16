@@ -21,6 +21,10 @@ const initialFriends = [
   },
 ];
 export default function App() {
+  // state to display or set freinds in FriendsList component
+  // for the first time rendering, the initialFriends array
+  // will be displayed as friends.
+  const [friends, setFriends] = useState(initialFriends);
   // declaring a state to display FormAddFriend component
   // by default this component is not displayed
   // when user clicks 'Add freind' it will show up
@@ -30,12 +34,20 @@ export default function App() {
   function handleShowAddFriend() {
     setShowAddFriendForm((show) => !show);
   }
+  // event handle function to add new frineds
+  // from the formAddFriend form submit info
+  function handleAddFreind(friend) {
+    setFriends((friends) => [...friends, friend]);
+    // after adding friend in the friend list,
+    // closing the add friend form component
+    setShowAddFriendForm(false);
+  }
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList />
+        <FriendsList friends={friends} />
         {/* conditionally rendering the show add freind component */}
-        {showAddFreindForm && <FormAddFreind />}
+        {showAddFreindForm && <FormAddFreind onAddFreind={handleAddFreind} />}
         <Button onClick={handleShowAddFriend}>
           {showAddFreindForm ? "Close" : "Add freind"}
         </Button>
@@ -51,8 +63,7 @@ function Button({ children, onClick }) {
     </button>
   );
 }
-function FriendsList() {
-  const friends = initialFriends;
+function FriendsList({ friends }) {
   return (
     <ul>
       {friends.map((friend) => (
@@ -84,14 +95,52 @@ function Friend({ friend }) {
   );
 }
 
-function FormAddFreind() {
+function FormAddFreind({ onAddFreind }) {
+  // states to add new friend
+  // setting up friend's name and image
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("https://i.pravatar.cc/48");
+
+  // function to handle the submit event of the form
+  function handleSubmit(e) {
+    // preventing the default rendering
+    // whenever form is submitted
+    e.preventDefault();
+    // guard clause
+    // no need to create new friend
+    // if name or image value is not set i.e. null
+    if (!name || !image) return;
+    // creating new friend
+    // generating unique id for each new frined added
+    const id = crypto.randomUUID();
+    const newFreind = {
+      id,
+      name,
+      balance: 0,
+      image: `${image}?u=${name}`,
+    };
+    // adding the new friend to the friends list
+    onAddFreind(newFreind);
+    // after submitting the form, set name and image
+    // to default value for further friend addition
+    setName("");
+    setImage("https://i.pravatar.cc/48");
+  }
   return (
-    <form className="form-add-friend">
+    <form className="form-add-friend" onSubmit={handleSubmit}>
       <label>👬Friend name</label>
-      <input type="text" />
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
 
       <label>📷Image URL</label>
-      <input type="text" />
+      <input
+        type="text"
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
       <Button>Add</Button>
     </form>
   );
