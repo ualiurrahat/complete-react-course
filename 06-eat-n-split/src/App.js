@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const initialFriends = [
   {
     id: 118836,
@@ -19,18 +21,36 @@ const initialFriends = [
   },
 ];
 export default function App() {
+  // declaring a state to display FormAddFriend component
+  // by default this component is not displayed
+  // when user clicks 'Add freind' it will show up
+  const [showAddFreindForm, setShowAddFriendForm] = useState(false);
+
+  // event handle function to display shwoAddFreindForm
+  function handleShowAddFriend() {
+    setShowAddFriendForm((show) => !show);
+  }
   return (
     <div className="app">
       <div className="sidebar">
         <FriendsList />
-        <FormAddFreind />
-        <Button>Add friend</Button>
+        {/* conditionally rendering the show add freind component */}
+        {showAddFreindForm && <FormAddFreind />}
+        <Button onClick={handleShowAddFriend}>
+          {showAddFreindForm ? "Close" : "Add freind"}
+        </Button>
       </div>
       <FormSplitBill></FormSplitBill>
     </div>
   );
 }
-
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+}
 function FriendsList() {
   const friends = initialFriends;
   return (
@@ -63,9 +83,7 @@ function Friend({ friend }) {
     </li>
   );
 }
-function Button({ children }) {
-  return <button className="button">{children}</button>;
-}
+
 function FormAddFreind() {
   return (
     <form className="form-add-friend">
