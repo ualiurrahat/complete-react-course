@@ -59,6 +59,21 @@ export default function App() {
     // split bill form is opened.
     setShowAddFriendForm(false);
   }
+
+  // function to handle splitting bill
+  function handleSplitBill(value) {
+    console.log(value);
+    setFriends((friends) =>
+      friends.map((friend) =>
+        friend.id === selectedFriend.id
+          ? { ...friend, balance: friend.balance + value }
+          : friend
+      )
+    );
+    // after splitting the bill and form is submitted
+    // vanishing the split bill form
+    setselectedFriend(null);
+  }
   return (
     <div className="app">
       <div className="sidebar">
@@ -76,7 +91,10 @@ export default function App() {
         </Button>
       </div>
       {selectedFriend && (
-        <FormSplitBill selectedFriend={selectedFriend}></FormSplitBill>
+        <FormSplitBill
+          selectedFriend={selectedFriend}
+          onSplitBill={handleSplitBill}
+        ></FormSplitBill>
       )}
     </div>
   );
@@ -183,7 +201,7 @@ function FormAddFreind({ onAddFreind }) {
     </form>
   );
 }
-function FormSplitBill({ selectedFriend }) {
+function FormSplitBill({ selectedFriend, onSplitBill }) {
   // state to control the bill,paid by user.
   // we are using null string as initial value
   // since these are input text elements.
@@ -195,8 +213,18 @@ function FormSplitBill({ selectedFriend }) {
   const [whoIsPaying, setWhoIsPaying] = useState("user");
   // amount to be paid by friend
   const paidByFriend = bill ? bill - paidByUser : "";
+
+  // event handle function to handle split bill form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    // guard clause
+    // if bill or paid by user is invalid,
+    // immediately return from the function
+    if (!bill || !paidByUser) return;
+    onSplitBill(whoIsPaying === "user" ? paidByFriend : -paidByUser);
+  }
   return (
-    <form className="form-split-bill">
+    <form className="form-split-bill" onSubmit={handleSubmit}>
       <h2>Split a bill with {selectedFriend.name}</h2>
       <label>💰 Bill value</label>
       <input
