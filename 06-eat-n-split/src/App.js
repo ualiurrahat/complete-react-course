@@ -30,6 +30,8 @@ export default function App() {
   // when user clicks 'Add freind' it will show up
   const [showAddFreindForm, setShowAddFriendForm] = useState(false);
 
+  // state to select a friend to split the bill
+  const [selectedFriend, setselectedFriend] = useState(null);
   // event handle function to display shwoAddFreindForm
   function handleShowAddFriend() {
     setShowAddFriendForm((show) => !show);
@@ -42,17 +44,40 @@ export default function App() {
     // closing the add friend form component
     setShowAddFriendForm(false);
   }
+  // event handle function to select a friend
+  // to split the bill
+  // whenever the 'select' button of a friend is clicked
+  // it opens the split bill form
+  // if the bill form is open for any particular friend
+  // then clicking the close button of that friend
+  // will make the split bill form disappear
+  // this is how the function is implemented.
+  function handleSelection(friend) {
+    // setselectedFriend(friend);
+    setselectedFriend((cur) => (cur?.id === friend.id ? null : friend));
+    // to close the add friend form when
+    // split bill form is opened.
+    setShowAddFriendForm(false);
+  }
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList friends={friends} />
+        <FriendsList
+          friends={friends}
+          onSelection={handleSelection}
+          selectedFriend={selectedFriend}
+        />
+
         {/* conditionally rendering the show add freind component */}
         {showAddFreindForm && <FormAddFreind onAddFreind={handleAddFreind} />}
+
         <Button onClick={handleShowAddFriend}>
           {showAddFreindForm ? "Close" : "Add freind"}
         </Button>
       </div>
-      <FormSplitBill></FormSplitBill>
+      {selectedFriend && (
+        <FormSplitBill selectedFriend={selectedFriend}></FormSplitBill>
+      )}
     </div>
   );
 }
@@ -63,19 +88,30 @@ function Button({ children, onClick }) {
     </button>
   );
 }
-function FriendsList({ friends }) {
+function FriendsList({ friends, onSelection, selectedFriend }) {
   return (
     <ul>
       {friends.map((friend) => (
-        <Friend friend={friend} key={friend.id} />
+        <Friend
+          friend={friend}
+          key={friend.id}
+          onSelection={onSelection}
+          selectedFriend={selectedFriend}
+        />
       ))}
     </ul>
   );
 }
 
-function Friend({ friend }) {
+function Friend({ friend, onSelection, selectedFriend }) {
+  //checking if the friend and the selected friend
+  // to split the bill is same or not
+  const isSelected = selectedFriend?.id === friend.id;
   return (
-    <li>
+    // applying css class "selected" to the li
+    // whenever the friend is selected to split the bill
+    // means current friend === selected friend.
+    <li className={isSelected ? "selected" : ""}>
       <img src={friend.image} alt={friend.name} />
       <h3>{friend.name}</h3>
       {friend.balance > 0 && (
@@ -90,7 +126,9 @@ function Friend({ friend }) {
         </p>
       )}
       {friend.balance === 0 && <p>You and {friend.name} are even</p>}
-      <Button>Select</Button>
+      <Button onClick={() => onSelection(friend)}>
+        {isSelected ? "Close" : "Select"}
+      </Button>
     </li>
   );
 }
@@ -145,23 +183,23 @@ function FormAddFreind({ onAddFreind }) {
     </form>
   );
 }
-function FormSplitBill() {
+function FormSplitBill({ selectedFriend }) {
   return (
     <form className="form-split-bill">
-      <h2>Split a bill with X</h2>
+      <h2>Split a bill with {selectedFriend.name}</h2>
       <label>💰 Bill value</label>
       <input type="text" />
 
       <label>🧑 Your expense</label>
       <input type="text" />
 
-      <label>👬 X's expense</label>
+      <label>👬 {selectedFriend.name}'s expense</label>
       <input type="text" disabled />
 
       <label>💰 Who is paying the bill?</label>
       <select>
         <option value="user">You</option>
-        <option value="friend">X</option>
+        <option value="friend">{selectedFriend.name}</option>
       </select>
       <Button>Split Bill</Button>
     </form>
